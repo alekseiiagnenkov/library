@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /library
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/library"
+    username: "postgres"
+    password: "postgres"
+    driverClassName: org.postgresql.Driver
+  jpa:
+    database:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop

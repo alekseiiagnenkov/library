@@ -1,0 +1,55 @@
+package ru.development.library.exceptions;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.validation.ValidationException;
+
+/**
+ * Централизированное управление ошибками.<br>
+ * Все ошибки летят сюда.
+ */
+@Slf4j
+@ControllerAdvice
+class CustomControllerAdvice {
+
+    @ExceptionHandler(LibraryException.class)
+    public ResponseEntity<String> handlePprbExceptions(LibraryException e) {
+        log.error(e.getClass().toString());
+        log.error(e.getMessage());
+        for (StackTraceElement element : e.getStackTrace())
+            log.error(element.toString());
+        return new ResponseEntity<>(
+                e.getMessage(),
+                HttpStatus.valueOf(400)
+        );
+    }
+
+    @ExceptionHandler({ValidationException.class, HttpMessageNotReadableException.class})
+    public ResponseEntity<String> handleJsonExceptions(Exception e) {
+        log.error(e.getClass().toString());
+        log.error(e.getMessage());
+        for (StackTraceElement element : e.getStackTrace())
+            log.error(element.toString());
+        return new ResponseEntity<>(
+                LibraryError.VALIDATION_ERROR.getMessage(),
+                HttpStatus.valueOf(400)
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleOtherExceptions(Exception e) {
+        log.error(e.getClass().toString());
+        log.error(e.getMessage());
+        for (StackTraceElement element : e.getStackTrace())
+            log.error(element.toString());
+        return new ResponseEntity<>(
+                LibraryError.TECHNICAL_ERROR.getMessage(),
+                HttpStatus.valueOf(400)
+        );
+    }
+}
