@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 import ru.development.library.model.Author;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+public interface AuthorRepository extends JpaRepository<Author, String> {
 
     Author getAuthorByFirstNameAndLastName(String firstName, String lastName);
 
-    Author getAllById(Long id);
+    Author getAllById(String id);
 }

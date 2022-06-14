@@ -18,7 +18,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/{id}")
-    BookRsDTO get(@PathVariable("id") Long id) throws LibraryException {
+    BookRsDTO get(@PathVariable("id") String id) throws LibraryException {
         return bookService.get(id);
     }
 
@@ -28,22 +28,22 @@ public class BookController {
     }
 
     @GetMapping("/{id}/authors")
-    List<AuthorRsDTO> getAllAuthors(@PathVariable("id") Long id) throws LibraryException {
+    List<AuthorRsDTO> getAllAuthors(@PathVariable("id") String id) throws LibraryException {
         return bookService.getAllAuthors(id);
     }
 
     @PostMapping("/create")
-    BookRsDTO create(@RequestBody BookRqDTO dto) throws LibraryException {
+    String create(@RequestBody BookRqDTO dto) throws LibraryException {
         return bookService.create(dto);
     }
 
     @PutMapping("/update/{id}")
-    BookRsDTO update(@PathVariable("id") Long id, @RequestBody BookRqDTO dto) throws LibraryException {
+    BookRsDTO update(@PathVariable("id") String id, @RequestBody BookRqDTO dto) throws LibraryException {
         return bookService.update(id, dto);
     }
 
     @DeleteMapping("/delete/{id}")
-    void delete(@PathVariable("id") Long id) throws LibraryException {
+    void delete(@PathVariable("id") String id) throws LibraryException {
         bookService.delete(id);
     }
 

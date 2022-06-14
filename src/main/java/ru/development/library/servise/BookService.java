@@ -11,6 +11,6 @@ public interface BookService extends BaseService<BookRqDTO, BookRsDTO> {
 
     List<BookRsDTO> getBooksByFragmentName(String fragments);
 
-    List<AuthorRsDTO> getAllAuthors(Long id) throws LibraryException;
+    List<AuthorRsDTO> getAllAuthors(String id) throws LibraryException;
 
 }

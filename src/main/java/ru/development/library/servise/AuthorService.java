@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface AuthorService extends BaseService<AuthorRqDTO, AuthorRsDTO>{
 
-    List<BookRsDTO> getAllBooks(Long id) throws LibraryException;
+    List<BookRsDTO> getAllBooks(String id) throws LibraryException;
 
 }

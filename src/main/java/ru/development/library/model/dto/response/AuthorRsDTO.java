@@ -7,6 +7,8 @@ import lombok.*;
 @Setter
 public class AuthorRsDTO {
 
+    private String id;
+
     private String firstName;
 
     private String lastName;

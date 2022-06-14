@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface BaseService<REQUEST, RESPONSE> {
 
-    RESPONSE get(Long id) throws LibraryException;
+    RESPONSE get(String id) throws LibraryException;
 
     List<RESPONSE> getAll();
 
-    RESPONSE create(REQUEST dto) throws LibraryException;
+    String create(REQUEST dto) throws LibraryException;
 
-    RESPONSE update(Long id, REQUEST dto) throws LibraryException;
+    RESPONSE update(String id, REQUEST dto) throws LibraryException;
 
-    void delete(Long id) throws LibraryException;
+    void delete(String id) throws LibraryException;
 
 }

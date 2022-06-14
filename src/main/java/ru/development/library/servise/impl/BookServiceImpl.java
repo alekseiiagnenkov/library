@@ -26,14 +26,13 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     private final AuthorRepository authorRepository;
-    private final AuthorService authorService;
 
     private final AuthorMapper authorMapper;
 
     private final BookMapper bookMapper;
 
     @Override
-    public List<AuthorRsDTO> getAllAuthors(Long id) throws LibraryException {
+    public List<AuthorRsDTO> getAllAuthors(String id) throws LibraryException {
         Book entity = bookRepository.findById(id)
                 .orElseThrow(() -> new LibraryException(LibraryError.BOOK_NOT_FOUND));
         return entity.getAuthorList().stream()
@@ -42,7 +41,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookRsDTO get(Long id) throws LibraryException {
+    public BookRsDTO get(String id) throws LibraryException {
         return bookMapper.entityToRsDto(bookRepository.findById(id)
                 .orElseThrow(() -> new LibraryException(LibraryError.BOOK_NOT_FOUND)));
     }
@@ -56,7 +55,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookRsDTO create(BookRqDTO request) throws LibraryException {
+    public String create(BookRqDTO request) throws LibraryException {
         if (bookRepository.findBooksByName(request.getName()).isPresent()) {
             throw new LibraryException(LibraryError.BOOK_ALREADY_EXIST);
         }
@@ -66,12 +65,12 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList()));
         Book book = bookMapper.dtoToEntity(request);
         book = bookRepository.save(book);
-        return bookMapper.entityToRsDto(bookRepository.save(book));
+        return bookRepository.save(book).getId();
     }
 
     @Override
     @Transactional
-    public BookRsDTO update(Long id, BookRqDTO request) throws LibraryException {
+    public BookRsDTO update(String id, BookRqDTO request) throws LibraryException {
         Book book = bookRepository.findById(id).orElseThrow(() -> new LibraryException(LibraryError.BOOK_NOT_FOUND));
 
         book.setName(request.getName());
@@ -80,7 +79,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void delete(Long id) throws LibraryException {
+    public void delete(String id) throws LibraryException {
         bookRepository.findById(id).orElseThrow(() -> new LibraryException(LibraryError.AUTHOR_NOT_FOUND));
         bookRepository.deleteById(id);
     }

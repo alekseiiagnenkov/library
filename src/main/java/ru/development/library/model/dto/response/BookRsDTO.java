@@ -10,7 +10,8 @@ import lombok.Setter;
 @Setter
 public class BookRsDTO {
 
-    @NotNull
+    private String id;
+
     private String name;
 
 }
