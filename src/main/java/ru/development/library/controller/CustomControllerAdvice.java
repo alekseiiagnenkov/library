@@ -7,7 +7,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.development.library.enumiration.LibraryError;
-import ru.development.library.exceptions.LibraryException;
+import ru.development.library.exception.LibraryException;
 
 import javax.validation.ValidationException;
 

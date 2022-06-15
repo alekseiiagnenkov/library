@@ -1,6 +1,6 @@
 package ru.development.library.service;
 
-import ru.development.library.exceptions.LibraryException;
+import ru.development.library.exception.LibraryException;
 
 import java.util.List;
 

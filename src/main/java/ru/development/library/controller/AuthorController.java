@@ -2,7 +2,7 @@ package ru.development.library.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.development.library.exceptions.LibraryException;
+import ru.development.library.exception.LibraryException;
 import ru.development.library.model.dto.request.AuthorRqDTO;
 import ru.development.library.model.dto.response.AuthorRsDTO;
 import ru.development.library.model.dto.response.BookRsDTO;

@@ -1,4 +1,4 @@
-package ru.development.library.exceptions;
+package ru.development.library.exception;
 
 import ru.development.library.enumiration.LibraryError;
 
