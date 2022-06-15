@@ -7,14 +7,17 @@ import java.util.List;
 
 @Builder
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode
 public class BookRqDTO {
 
+    @Setter
     @NotNull
     private String name;
 
+    @NotNull
     private List<AuthorRqDTO> authorList;
 
+    public List<AuthorRqDTO> getAuthorList() {
+        return List.copyOf(authorList);
+    }
 }

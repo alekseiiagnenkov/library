@@ -1,4 +1,4 @@
-package ru.development.library.servise;
+package ru.development.library.service;
 
 import ru.development.library.exceptions.LibraryException;
 import ru.development.library.model.dto.request.AuthorRqDTO;

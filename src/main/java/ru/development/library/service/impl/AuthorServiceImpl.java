@@ -1,9 +1,10 @@
-package ru.development.library.servise.impl;
+package ru.development.library.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.development.library.exceptions.LibraryError;
+import ru.development.library.exceptions.AuthorNotFoundException;
+import ru.development.library.exceptions.DuplicateAuthorException;
 import ru.development.library.exceptions.LibraryException;
 import ru.development.library.mapper.AuthorMapper;
 import ru.development.library.mapper.BookMapper;
@@ -12,7 +13,7 @@ import ru.development.library.model.dto.request.AuthorRqDTO;
 import ru.development.library.model.dto.response.AuthorRsDTO;
 import ru.development.library.model.dto.response.BookRsDTO;
 import ru.development.library.repository.AuthorRepository;
-import ru.development.library.servise.AuthorService;
+import ru.development.library.service.AuthorService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<BookRsDTO> getAllBooks(String id) throws LibraryException {
         Author entity = authorRepository.findById(id)
-                .orElseThrow(() -> new LibraryException(LibraryError.AUTHOR_NOT_FOUND));
+                .orElseThrow(AuthorNotFoundException::new);
         return entity.getBookList().stream()
                 .map(bookMapper::entityToRsDto)
                 .collect(Collectors.toList());
@@ -39,7 +40,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorRsDTO get(String id) throws LibraryException {
         return authorMapper.entityToRsDto(authorRepository.findById(id)
-                .orElseThrow(() -> new LibraryException(LibraryError.AUTHOR_NOT_FOUND)));
+                .orElseThrow(AuthorNotFoundException::new));
     }
 
     @Override
@@ -53,7 +54,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     public String create(AuthorRqDTO dto) throws LibraryException {
         if (authorRepository.getAuthorByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()) != null) {
-            throw new LibraryException(LibraryError.AUTHOR_ALREADY_EXIST);
+            throw new DuplicateAuthorException();
         }
         Author entity = authorMapper.dtoToEntity(dto);
         return authorRepository.save(entity).getId();
@@ -62,7 +63,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public AuthorRsDTO update(String id, AuthorRqDTO dto) throws LibraryException {
-        Author entity = authorRepository.findById(id).orElseThrow(() -> new LibraryException(LibraryError.AUTHOR_NOT_FOUND));
+        Author entity = authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
         entity.setFirstName(dto.getFirstName());
         if (dto.getLastName() != null)
             entity.setLastName(dto.getLastName());
@@ -73,7 +74,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public void delete(String id) throws LibraryException {
-        authorRepository.findById(id).orElseThrow(() -> new LibraryException(LibraryError.AUTHOR_NOT_FOUND));
+        authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
         authorRepository.deleteById(id);
     }
 }

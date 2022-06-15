@@ -6,7 +6,7 @@ import ru.development.library.exceptions.LibraryException;
 import ru.development.library.model.dto.request.AuthorRqDTO;
 import ru.development.library.model.dto.response.AuthorRsDTO;
 import ru.development.library.model.dto.response.BookRsDTO;
-import ru.development.library.servise.AuthorService;
+import ru.development.library.service.AuthorService;
 
 import java.util.List;
 

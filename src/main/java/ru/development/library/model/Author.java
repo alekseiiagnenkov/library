@@ -1,6 +1,6 @@
 package ru.development.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Setter
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "author")
 public class Author {
 
@@ -26,15 +26,19 @@ public class Author {
     @Column(name = "author_id", unique = true, columnDefinition = "varchar(32)")
     private String id;
 
+    @Setter
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @Setter
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Setter
     @Column(name = "create_date")
     private OffsetDateTime createDate;
 
+    @Setter
     @Column(name = "male", nullable = false)
     private boolean male;
 
@@ -44,4 +48,8 @@ public class Author {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Book> bookList = new ArrayList<>();
+
+    public List<Book> getBookList() {
+        return List.copyOf(bookList);
+    }
 }

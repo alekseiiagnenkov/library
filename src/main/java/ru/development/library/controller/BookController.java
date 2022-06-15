@@ -6,7 +6,7 @@ import ru.development.library.exceptions.LibraryException;
 import ru.development.library.model.dto.request.BookRqDTO;
 import ru.development.library.model.dto.response.AuthorRsDTO;
 import ru.development.library.model.dto.response.BookRsDTO;
-import ru.development.library.servise.BookService;
+import ru.development.library.service.BookService;
 
 import java.util.List;
 
@@ -25,6 +25,11 @@ public class BookController {
     @GetMapping
     List<BookRsDTO> getAll() {
         return bookService.getAll();
+    }
+
+    @GetMapping("/find-books")
+    public List<BookRsDTO> findBooks(@RequestParam(value = "fragment") String fragment) {
+        return bookService.getBooksByFragmentName(fragment);
     }
 
     @GetMapping("/{id}/authors")
