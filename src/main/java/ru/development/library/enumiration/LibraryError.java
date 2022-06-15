@@ -1,4 +1,4 @@
-package ru.development.library.exceptions;
+package ru.development.library.enumiration;
 
 public enum LibraryError {
 

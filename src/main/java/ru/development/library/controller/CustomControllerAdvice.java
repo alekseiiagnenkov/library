@@ -1,11 +1,13 @@
-package ru.development.library.exceptions;
+package ru.development.library.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.development.library.enumiration.LibraryError;
+import ru.development.library.exceptions.LibraryException;
 
 import javax.validation.ValidationException;
 
@@ -14,11 +16,11 @@ import javax.validation.ValidationException;
  * Все ошибки летят сюда.
  */
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 class CustomControllerAdvice {
 
     @ExceptionHandler(LibraryException.class)
-    public ResponseEntity<String> handlePprbExceptions(LibraryException e) {
+    public ResponseEntity<String> handleLibraryExceptions(LibraryException e) {
         log.error(e.getClass().toString());
         log.error(e.getMessage());
         for (StackTraceElement element : e.getStackTrace())

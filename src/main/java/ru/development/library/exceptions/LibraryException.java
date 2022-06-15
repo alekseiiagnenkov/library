@@ -1,15 +1,10 @@
 package ru.development.library.exceptions;
 
-public class LibraryException extends Exception {
+import ru.development.library.enumiration.LibraryError;
 
-    private final String message;
+public abstract class LibraryException extends RuntimeException {
 
-    public LibraryException(LibraryError error){
-        this.message = error.getMessage();
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
+    protected LibraryException(LibraryError error) {
+        super(error.getMessage());
     }
 }
