@@ -2,14 +2,27 @@ server:
   port: 8080
   servlet:
     context-path: /library
+
 spring:
   datasource:
-    url: "jdbc:postgresql://localhost:5432/library"
-    username: "postgres"
-    password: "postgres"
+    url: jdbc:postgresql://localhost:5432/library
+    username: postgres
+    password: postgres
     driverClassName: org.postgresql.Driver
   jpa:
     database:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase.db.changelog/db.changelog-master.xml
+
+logging:
+  file:
+    name: src/main/resources/application-debug.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    org.springframework.web: TRACE

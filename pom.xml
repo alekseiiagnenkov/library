@@ -20,6 +20,7 @@
 		<mapstruct.version>1.5.1.Final</mapstruct.version>
 		<springdoc-openapi-ui.version>1.6.9</springdoc-openapi-ui.version>
 		<spring-boot-starter-web.version>2.7.0</spring-boot-starter-web.version>
+		<liquibase-core>4.11.0</liquibase-core>
 	</properties>
 
 	<dependencies>
@@ -28,7 +29,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -64,13 +64,11 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson-annotations.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
@@ -81,6 +79,12 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${springdoc-openapi-ui.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase-core}</version>
 		</dependency>
 
 	</dependencies>
