@@ -24,17 +24,14 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-
     private final AuthorRepository authorRepository;
-
     private final AuthorMapper authorMapper;
-
     private final BookMapper bookMapper;
 
     @Override
     public List<AuthorRsDTO> getAllAuthors(String id) throws LibraryException {
         Book entity = bookRepository.findById(id)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(id));
         return entity.getAuthorList().stream()
                 .map(authorMapper::entityToRsDto)
                 .collect(Collectors.toList());
@@ -43,7 +40,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookRsDTO get(String id) throws LibraryException {
         return bookMapper.entityToRsDto(bookRepository.findById(id)
-                .orElseThrow(BookNotFoundException::new));
+                .orElseThrow(() -> new BookNotFoundException(id)));
     }
 
     @Override
@@ -55,24 +52,30 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public String create(BookRqDTO request) throws LibraryException {
-        if (bookRepository.findBooksByName(request.getName()).isPresent()) {
-            throw new DuplicateBookException();
+    public String create(BookRqDTO dto) throws LibraryException {
+        if (isDuplicate(dto)) {
+            throw new DuplicateBookException(dto.getName());
         }
+        removeExistingAuthors(dto);
+        Book book = bookMapper.dtoToEntity(dto);
+        return bookRepository.save(book).getId();
+    }
 
-        request.getAuthorList().removeAll(authorRepository.findAll().stream()
+    private boolean isDuplicate(BookRqDTO dto) {
+        return bookRepository.findBooksByName(dto.getName()).isPresent();
+    }
+
+    private void removeExistingAuthors(BookRqDTO dto) {
+        dto.getAuthorList().removeAll(authorRepository.findAll().stream()
                 .map(authorMapper::entityToRqDto)
                 .collect(Collectors.toList()));
-        Book book = bookMapper.dtoToEntity(request);
-        book = bookRepository.save(book);
-        return bookRepository.save(book).getId();
     }
 
     @Override
     @Transactional
     public BookRsDTO update(String id, BookRqDTO request) throws LibraryException {
-        Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
         book.setName(request.getName());
         return bookMapper.entityToRsDto(bookRepository.save(book));
     }
@@ -80,7 +83,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void delete(String id) throws LibraryException {
-        bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
         bookRepository.deleteById(id);
     }
 

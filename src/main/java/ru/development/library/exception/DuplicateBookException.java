@@ -1,9 +1,9 @@
 package ru.development.library.exception;
 
-import ru.development.library.enumiration.LibraryError;
+import ru.development.library.enumiration.ErrorMessage;
 
 public class DuplicateBookException extends LibraryException {
-    public DuplicateBookException() {
-        super(LibraryError.BOOK_ALREADY_EXIST);
+    public DuplicateBookException(String name) {
+        super(ErrorMessage.BOOK_ALREADY_EXIST, name);
     }
 }

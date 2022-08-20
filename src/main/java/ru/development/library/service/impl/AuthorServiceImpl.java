@@ -23,15 +23,13 @@ import java.util.stream.Collectors;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
-
     private final AuthorMapper authorMapper;
-
     private final BookMapper bookMapper;
 
     @Override
     public List<BookRsDTO> getAllBooks(String id) throws LibraryException {
         Author entity = authorRepository.findById(id)
-                .orElseThrow(AuthorNotFoundException::new);
+                .orElseThrow(() -> new AuthorNotFoundException(id));
         return entity.getBookList().stream()
                 .map(bookMapper::entityToRsDto)
                 .collect(Collectors.toList());
@@ -40,7 +38,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorRsDTO get(String id) throws LibraryException {
         return authorMapper.entityToRsDto(authorRepository.findById(id)
-                .orElseThrow(AuthorNotFoundException::new));
+                .orElseThrow(() -> new AuthorNotFoundException(id)));
     }
 
     @Override
@@ -53,28 +51,36 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public String create(AuthorRqDTO dto) throws LibraryException {
-        if (authorRepository.getAuthorByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()) != null) {
-            throw new DuplicateAuthorException();
+        if (isDuplicate(dto)) {
+            throw new DuplicateAuthorException(dto.getFirstName(), dto.getLastName());
         }
         Author entity = authorMapper.dtoToEntity(dto);
         return authorRepository.save(entity).getId();
     }
 
+    private boolean isDuplicate(AuthorRqDTO dto) {
+        return authorRepository.getAuthorByFirstNameAndLastName(dto.getFirstName(), dto.getLastName()) != null;
+    }
+
     @Override
     @Transactional
     public AuthorRsDTO update(String id, AuthorRqDTO dto) throws LibraryException {
-        Author entity = authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
+        Author entity = authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
+        updateEntityFromDto(dto, entity);
+        return authorMapper.entityToRsDto(authorRepository.save(entity));
+    }
+
+    private void updateEntityFromDto(AuthorRqDTO dto, Author entity) {
         entity.setFirstName(dto.getFirstName());
         if (dto.getLastName() != null)
             entity.setLastName(dto.getLastName());
         entity.setMale(dto.isMale());
-        return authorMapper.entityToRsDto(authorRepository.save(entity));
     }
 
     @Override
     @Transactional
     public void delete(String id) throws LibraryException {
-        authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
+        authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
         authorRepository.deleteById(id);
     }
 }
